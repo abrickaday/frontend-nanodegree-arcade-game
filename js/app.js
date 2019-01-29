@@ -20,6 +20,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+
     // make enemies loop across the board
     if (this.x <= 505) {
       this.x = this.x + (this.speed * dt);
@@ -27,14 +28,32 @@ Enemy.prototype.update = function(dt) {
       this.x = -101 * (Math.floor(Math.random() * 5) + 1); //randomize the starting position of the enemy after the loop
     }
 
-    // console.log('player x:',player.x);
-    // console.log('player y:',player.y);
+    // reset player position if it reaches the water
     if (player.y == -10) {
-      console.log('Reached water!');
-      player.x = 101 * 2;
-      player.y = 83 * 5 - 10;
+      player.x = 101 * 2; // player's initial x coordinate
+      player.y = 83 * 5 - 10; // player's initial y coordinate
     }
 
+    // Collision Detection
+
+    // Y-axis considerations:
+    // For aesthetic purpose, Enemy's initial y coordinate is offset by -20 (refer to: this.y = (83 * row) - 20;),
+    // while Player's initial y coordinate is offset by -10 (refer to this.y =  83 * 5 - 10;),
+    // for Enemy and Player to collide, Enemy's y coordinate needs to be shifted by 10 to match Player's y coordinate
+
+    // X-axis considerations:
+    // Enemy's x coordinate is located at the Enemy's backside (visually), to have a 'head-on' collision with the Player,
+    // The x coordinate of interest should be the x coordinate of the Enemy's head, which is thix.x + 75, where
+    // the number 75 can be adjusted to simulate a more realistic collision, for example if the number is 101,
+    // then the collision happens before the sprites of the enemy and the player touches each other visually
+    // A boundary is set (this.x + 75 < player.x + 101) so that the x-direction collision is considered complete
+    // after the enemy passes by the length of the player (player.x + 101)
+
+    if ((this.y + 10 == player.y) && (this.x + 75 > player.x && this.x + 75 < player.x + 101)) {
+      // reset player position if it collides with enemies
+      player.x = 101 * 2; // player's initial x coordinate
+      player.y = 83 * 5 - 10; // player's initial y coordinate
+    }
 
 };
 
@@ -112,11 +131,11 @@ const enemy1C = new Enemy(1, (Math.floor(Math.random() * 250) + 200));
 
 const enemy2A = new Enemy(2, (Math.floor(Math.random() * 150) + 100));
 const enemy2B = new Enemy(2, (Math.floor(Math.random() * 200) + 150));
-// const enemy2C = new Enemy(2, (Math.floor(Math.random() * 250) + 200));
+const enemy2C = new Enemy(2, (Math.floor(Math.random() * 250) + 200));
 
 const enemy3A = new Enemy(3, (Math.floor(Math.random() * 150) + 100));
-// const enemy3B = new Enemy(3, (Math.floor(Math.random() * 200) + 150));
-// const enemy3C = new Enemy(3, (Math.floor(Math.random() * 250) + 200));
+const enemy3B = new Enemy(3, (Math.floor(Math.random() * 200) + 150));
+const enemy3C = new Enemy(3, (Math.floor(Math.random() * 250) + 200));
 
 let allEnemies = [];
 
@@ -126,8 +145,8 @@ allEnemies.push(enemy1C);
 allEnemies.push(enemy2A);
 allEnemies.push(enemy2B);
 // allEnemies.push(enemy2C);
-allEnemies.push(enemy3A);
-// allEnemies.push(enemy3B);
+// allEnemies.push(enemy3A);
+allEnemies.push(enemy3B);
 // allEnemies.push(enemy3C);
 
 const player = new Player();
