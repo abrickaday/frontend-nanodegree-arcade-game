@@ -58,19 +58,31 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(key) {
     if (key == 'up') {
       console.log('up');
-      this.dy = -83;
+      // constrain player within the game board
+      if (this.y > -20) {
+        this.dy = -83;
+      }
     }
     if (key == 'down') {
       console.log('down');
-      this.dy = 83;
+      // constrain player within the game board
+      if (this.y < 395) {
+        this.dy = 83;
+      }
     }
     if (key == 'left') {
       console.log('left');
-      this.dx = -101;
+      // constrain player within the game board
+      if (this.x > 0) {
+        this.dx = -101;
+      }
     }
     if (key == 'right') {
       console.log('right');
-      this.dx = 101;
+      // constrain player within the game board
+      if (this.x < 404) {
+        this.dx = 101;
+      }
     }
 
 };
