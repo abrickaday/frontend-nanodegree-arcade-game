@@ -78,6 +78,7 @@ var Player = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
+    this.heart = 'images/Heart.png';
     this.x = 101 * 2; // initial x coordinate of the player
     this.y =  83 * 5 - 10; // initial y coordinate of the player
     this.dx = 0; // dx (delta x) is the change in the player's x coordinate after an arrow key is pressed
@@ -100,6 +101,10 @@ Player.prototype.update = function() {
 // Draw the player on the screen, required method for game
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
+    if (this.y == -10) {
+      ctx.drawImage(Resources.get(this.heart), this.x, this.y + 100);
+    }
 };
 
 Player.prototype.handleInput = function(key) {
@@ -130,11 +135,17 @@ Player.prototype.handleInput = function(key) {
 
 };
 
+var winPauseTimer = 0;
+
 Player.prototype.checkCrossing = function() {
   // reset player position if it reaches the water
   if (this.y == -10) {
-    this.x = 101 * 2; // player's initial x coordinate
-    this.y = 83 * 5 - 10; // player's initial y coordinate
+    winPauseTimer += 1;
+    if (winPauseTimer > 30) {
+      this.x = 101 * 2; // player's initial x coordinate
+      this.y = 83 * 5 - 10; // player's initial y coordinate
+      winPauseTimer = 0;
+    }
   }
 };
 
