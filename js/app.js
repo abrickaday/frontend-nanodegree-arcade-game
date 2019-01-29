@@ -33,8 +33,6 @@ Enemy.prototype.update = function(dt) {
       this.x = -101 * getRandomIntInclusive(1,5); //randomize the starting position of the enemy after the loop
     }
 
-
-    this.checkCrossing();
     this.checkCollisions();
 
 };
@@ -68,13 +66,7 @@ Enemy.prototype.checkCollisions = function() {
 
 };
 
-Enemy.prototype.checkCrossing = function() {
-  // reset player position if it reaches the water
-  if (player.y == -10) {
-    player.x = 101 * 2; // player's initial x coordinate
-    player.y = 83 * 5 - 10; // player's initial y coordinate
-  }
-};
+
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -93,6 +85,8 @@ var Player = function() {
 };
 
 Player.prototype.update = function() {
+    this.checkCrossing();
+
     this.x = this.x + this.dx; // increase or decrease the player's x coordinate by dx
     this.y = this.y + this.dy; // increase or decrease the player's y coordinate by dy
 
@@ -100,6 +94,7 @@ Player.prototype.update = function() {
     // dx and dy will be assigned new values at the next key press
     this.dx = 0;
     this.dy = 0;
+
 };
 
 // Draw the player on the screen, required method for game
@@ -133,6 +128,14 @@ Player.prototype.handleInput = function(key) {
       }
     }
 
+};
+
+Player.prototype.checkCrossing = function() {
+  // reset player position if it reaches the water
+  if (this.y == -10) {
+    this.x = 101 * 2; // player's initial x coordinate
+    this.y = 83 * 5 - 10; // player's initial y coordinate
+  }
 };
 
 // Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
