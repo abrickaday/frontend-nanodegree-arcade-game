@@ -33,38 +33,47 @@ Enemy.prototype.update = function(dt) {
       this.x = -101 * getRandomIntInclusive(1,5); //randomize the starting position of the enemy after the loop
     }
 
-    // reset player position if it reaches the water
-    if (player.y == -10) {
-      player.x = 101 * 2; // player's initial x coordinate
-      player.y = 83 * 5 - 10; // player's initial y coordinate
-    }
 
-    // Collision Detection
-
-    // Y-axis considerations:
-    // For aesthetic purpose, Enemy's initial y coordinate is offset by -20 (refer to: this.y = (83 * row) - 20;),
-    // while Player's initial y coordinate is offset by -10 (refer to this.y =  83 * 5 - 10;),
-    // for Enemy and Player to collide, Enemy's y coordinate needs to be shifted by 10 to match Player's y coordinate
-
-    // X-axis considerations:
-    // Enemy's x coordinate is located at the Enemy's backside (visually), to have a 'head-on' collision with the Player,
-    // The x coordinate of interest should be the x coordinate of the Enemy's head, which is thix.x + 75, where
-    // the number 75 can be adjusted to simulate a more realistic collision, for example if the number is 101,
-    // then the collision happens before the sprites of the enemy and the player touches each other visually
-    // A boundary is set (this.x + 75 < player.x + 101) so that the x-direction collision is considered complete
-    // after the enemy passes by the length of the player (player.x + 101)
-
-    if ((this.y + 10 == player.y) && (this.x + 75 > player.x && this.x + 75 < player.x + 101)) {
-      // reset player position if it collides with enemies
-      player.x = 101 * 2; // player's initial x coordinate
-      player.y = 83 * 5 - 10; // player's initial y coordinate
-    }
+    this.checkCrossing();
+    this.checkCollisions();
 
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Enemy.prototype.checkCollisions = function() {
+  // Collision Detection
+
+  // Y-axis considerations:
+  // For aesthetic purpose, Enemy's initial y coordinate is offset by -20 (refer to: this.y = (83 * row) - 20;),
+  // while Player's initial y coordinate is offset by -10 (refer to this.y =  83 * 5 - 10;),
+  // for Enemy and Player to collide, Enemy's y coordinate needs to be shifted by 10 to match Player's y coordinate
+
+  // X-axis considerations:
+  // Enemy's x coordinate is located at the Enemy's backside (visually), to have a 'head-on' collision with the Player,
+  // The x coordinate of interest should be the x coordinate of the Enemy's head, which is thix.x + 75, where
+  // the number 75 can be adjusted to simulate a more realistic collision, for example if the number is 101,
+  // then the collision happens before the sprites of the enemy and the player touches each other visually
+  // A boundary is set (this.x + 75 < player.x + 101) so that the x-direction collision is considered complete
+  // after the enemy passes by the length of the player (player.x + 101)
+
+  if ((this.y + 10 == player.y) && (this.x + 75 > player.x && this.x + 75 < player.x + 101)) {
+    // reset player position if it collides with enemies
+    player.x = 101 * 2; // player's initial x coordinate
+    player.y = 83 * 5 - 10; // player's initial y coordinate
+  }
+
+};
+
+Enemy.prototype.checkCrossing = function() {
+  // reset player position if it reaches the water
+  if (player.y == -10) {
+    player.x = 101 * 2; // player's initial x coordinate
+    player.y = 83 * 5 - 10; // player's initial y coordinate
+  }
 };
 
 // Now write your own player class
