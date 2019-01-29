@@ -37,14 +37,17 @@ var Player = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
-    this.x = 101 * 0;
-    this.y = (83 * 5) - 20;
+    this.x = 101 * 2;
+    this.y =  83 * 5 - 20;
+    this.dx = 0;
+    this.dy = 0;
 };
 
-Player.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+Player.prototype.update = function() {
+    this.x = this.x + this.dx;
+    this.y = this.y + this.dy;
+    this.dx = 0;
+    this.dy = 0;
 };
 
 // Draw the player on the screen, required method for game
@@ -52,7 +55,23 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.handleInput = function(keyCode) {
+Player.prototype.handleInput = function(key) {
+    if (key == 'up') {
+      console.log('up');
+      this.dy = -83;
+    }
+    if (key == 'down') {
+      console.log('down');
+      this.dy = 83;
+    }
+    if (key == 'left') {
+      console.log('left');
+      this.dx = -101;
+    }
+    if (key == 'right') {
+      console.log('right');
+      this.dx = 101;
+    }
 
 };
 
