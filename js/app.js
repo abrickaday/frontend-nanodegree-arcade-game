@@ -6,7 +6,10 @@ var Enemy = function(row, speed) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = -101; // enemy is initially hidden from the game board using negative coordinates
+    // enemy is initially hidden from the game board using negative coordinates
+    // enemy initial position is randomized
+    // this.x = -101 * (Math.floor(Math.random() * 10) + 1);
+    this.x = -101 * 1;
     this.y = (83 * row) - 20;
     this.speed = speed;
 };
@@ -18,10 +21,10 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     // make enemies loop across the board
-    if (this.x >= -101 && this.x <= 505) {
+    if (this.x <= 505) {
       this.x = this.x + (this.speed * dt);
     } else {
-      this.x = -101;
+      this.x = -101 * (Math.floor(Math.random() * 5) + 1); //randomize the starting position of the enemy after the loop
     }
 };
 
@@ -93,16 +96,29 @@ Player.prototype.handleInput = function(key) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const enemy1 = new Enemy(1, 100);
-const enemy2 = new Enemy(2, 200);
-const enemy3 = new Enemy(3, 300);
+const enemy1A = new Enemy(1, (Math.floor(Math.random() * 150) + 100));
+const enemy1B = new Enemy(1, (Math.floor(Math.random() * 200) + 150));
+const enemy1C = new Enemy(1, (Math.floor(Math.random() * 250) + 200));
 
-console.log(enemy1);
+const enemy2A = new Enemy(2, (Math.floor(Math.random() * 150) + 100));
+const enemy2B = new Enemy(2, (Math.floor(Math.random() * 200) + 150));
+// const enemy2C = new Enemy(2, (Math.floor(Math.random() * 250) + 200));
+
+const enemy3A = new Enemy(3, (Math.floor(Math.random() * 150) + 100));
+// const enemy3B = new Enemy(3, (Math.floor(Math.random() * 200) + 150));
+// const enemy3C = new Enemy(3, (Math.floor(Math.random() * 250) + 200));
 
 let allEnemies = [];
-allEnemies.push(enemy1);
-allEnemies.push(enemy2);
-allEnemies.push(enemy3);
+
+allEnemies.push(enemy1A);
+allEnemies.push(enemy1B);
+allEnemies.push(enemy1C);
+allEnemies.push(enemy2A);
+allEnemies.push(enemy2B);
+// allEnemies.push(enemy2C);
+allEnemies.push(enemy3A);
+// allEnemies.push(enemy3B);
+// allEnemies.push(enemy3C);
 
 const player = new Player();
 console.log(player);
