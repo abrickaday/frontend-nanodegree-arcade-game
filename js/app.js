@@ -6,11 +6,16 @@ var Enemy = function(row, speed) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    // enemy is initially hidden from the game board using negative coordinates
-    // enemy initial position is randomized
-    // this.x = -101 * (Math.floor(Math.random() * 10) + 1);
+
+    // enemy is initially hidden from the game board using negative x coordinate
     this.x = -101 * 1;
+
+    // the row parameter determines the row that this instance of the Enemy occupies
+    // row = 1 is closest to the water
+    // For aesthetic purpose, offset the Enemy sprite by -20 to visually fit it within the row (with stones background)
     this.y = (83 * row) - 20;
+
+    // the speed at which an Enemy will travel across the game board
     this.speed = speed;
 };
 
@@ -25,7 +30,7 @@ Enemy.prototype.update = function(dt) {
     if (this.x <= 505) {
       this.x = this.x + (this.speed * dt);
     } else {
-      this.x = -101 * (Math.floor(Math.random() * 5) + 1); //randomize the starting position of the enemy after the loop
+      this.x = -101 * getRandomIntInclusive(1,5); //randomize the starting position of the enemy after the loop
     }
 
     // reset player position if it reaches the water
@@ -72,15 +77,18 @@ var Player = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
-    this.x = 101 * 2;
-    this.y =  83 * 5 - 10;
-    this.dx = 0;
-    this.dy = 0;
+    this.x = 101 * 2; // initial x coordinate of the player
+    this.y =  83 * 5 - 10; // initial y coordinate of the player
+    this.dx = 0; // dx (delta x) is the change in the player's x coordinate after an arrow key is pressed
+    this.dy = 0; // dy (delta y) is the change in the player's y coordinate after an arrow key is pressed
 };
 
 Player.prototype.update = function() {
-    this.x = this.x + this.dx;
-    this.y = this.y + this.dy;
+    this.x = this.x + this.dx; // increase or decrease the player's x coordinate by dx
+    this.y = this.y + this.dy; // increase or decrease the player's y coordinate by dy
+
+    // reset the dx and dx to zero after the player is moved
+    // dx and dy will be assigned new values at the next key press
     this.dx = 0;
     this.dy = 0;
 };
@@ -91,30 +99,26 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.handleInput = function(key) {
+    // Constrain the player within the game board by limiting its x & y coordinates
+    // Player's y coordinate should be within -10 and 405
+    // Player's x coordinate should be within 0 and 404
+
     if (key == 'up') {
-      console.log('up');
-      // constrain player within the game board
       if (this.y > -10) {
         this.dy = -83;
       }
     }
     if (key == 'down') {
-      console.log('down');
-      // constrain player within the game board
       if (this.y < 405) {
         this.dy = 83;
       }
     }
     if (key == 'left') {
-      console.log('left');
-      // constrain player within the game board
       if (this.x > 0) {
         this.dx = -101;
       }
     }
     if (key == 'right') {
-      console.log('right');
-      // constrain player within the game board
       if (this.x < 404) {
         this.dx = 101;
       }
@@ -122,35 +126,39 @@ Player.prototype.handleInput = function(key) {
 
 };
 
+// Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
+
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const enemy1A = new Enemy(1, (Math.floor(Math.random() * 150) + 100));
-const enemy1B = new Enemy(1, (Math.floor(Math.random() * 200) + 150));
-const enemy1C = new Enemy(1, (Math.floor(Math.random() * 250) + 200));
-
-const enemy2A = new Enemy(2, (Math.floor(Math.random() * 150) + 100));
-const enemy2B = new Enemy(2, (Math.floor(Math.random() * 200) + 150));
-const enemy2C = new Enemy(2, (Math.floor(Math.random() * 250) + 200));
-
-const enemy3A = new Enemy(3, (Math.floor(Math.random() * 150) + 100));
-const enemy3B = new Enemy(3, (Math.floor(Math.random() * 200) + 150));
-const enemy3C = new Enemy(3, (Math.floor(Math.random() * 250) + 200));
-
 let allEnemies = [];
 
-allEnemies.push(enemy1A);
-allEnemies.push(enemy1B);
-allEnemies.push(enemy1C);
-allEnemies.push(enemy2A);
-allEnemies.push(enemy2B);
-// allEnemies.push(enemy2C);
-// allEnemies.push(enemy3A);
-allEnemies.push(enemy3B);
-// allEnemies.push(enemy3C);
+// set the no. of enemies at each row
+const enemyCntRow1 = 3; // no. of enemies at row 1 (nearest to the water)
+const enemyCntRow2 = 2; // no. of enemies at row 2
+const enemyCntRow3 = 1; // no. of enemies at row 3
+
+// instantiate an enemy object with a row number and a random speed between 100 and 300
+// push this new object into the allEnemies array
+for (let i = 0; i < enemyCntRow1; i++) {
+  allEnemies.push(new Enemy(1, getRandomIntInclusive(300,400)));
+}
+
+for (let i = 0; i < enemyCntRow2; i++) {
+  allEnemies.push(new Enemy(2, getRandomIntInclusive(200,300)));
+}
+
+for (let i = 0; i < enemyCntRow3; i++) {
+  allEnemies.push(new Enemy(3, getRandomIntInclusive(100,200)));
+}
 
 const player = new Player();
-console.log(player);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
