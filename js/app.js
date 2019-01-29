@@ -26,6 +26,16 @@ Enemy.prototype.update = function(dt) {
     } else {
       this.x = -101 * (Math.floor(Math.random() * 5) + 1); //randomize the starting position of the enemy after the loop
     }
+
+    // console.log('player x:',player.x);
+    // console.log('player y:',player.y);
+    if (player.y == -10) {
+      console.log('Reached water!');
+      player.x = 101 * 2;
+      player.y = 83 * 5 - 10;
+    }
+
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -44,7 +54,7 @@ var Player = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
     this.x = 101 * 2;
-    this.y =  83 * 5 - 20;
+    this.y =  83 * 5 - 10;
     this.dx = 0;
     this.dy = 0;
 };
@@ -65,14 +75,14 @@ Player.prototype.handleInput = function(key) {
     if (key == 'up') {
       console.log('up');
       // constrain player within the game board
-      if (this.y > -20) {
+      if (this.y > -10) {
         this.dy = -83;
       }
     }
     if (key == 'down') {
       console.log('down');
       // constrain player within the game board
-      if (this.y < 395) {
+      if (this.y < 405) {
         this.dy = 83;
       }
     }
